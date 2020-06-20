@@ -25,6 +25,7 @@
 #     # move repo to the correct folder
 #      "sudo mv /tmp/grafana.repo /etc/yum.repos.d/grafana.repo",
 #      "sudo chown root:root /etc/yum.repos.d/grafana.repo",
+#      "yum-config-manager --enable grafana.repo",
 #      # install grafana
 #      "sudo yum install grafana fontconfig freetype* urw-fonts -y",
 #       # install start and enable grafana
