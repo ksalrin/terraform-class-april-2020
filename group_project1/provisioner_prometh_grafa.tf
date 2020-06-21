@@ -2,7 +2,6 @@
   key_name   = "deployer-key"
   public_key = "${file("~/.ssh/id_rsa.pub")}"
 }
-
 resource "aws_instance" "web" {
   ami           = "${data.aws_ami.amazon.id}"
   key_name      = "${aws_key_pair.deployer.key_name}"
