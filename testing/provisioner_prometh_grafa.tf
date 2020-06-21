@@ -4,9 +4,8 @@
 }
 resource "aws_instance" "web" {
   ami           = "${data.aws_ami.amazon.id}"
-  subnet_id = "${aws_subnet.public1.id}"
   key_name      = "${aws_key_pair.deployer.key_name}"
-  security_groups  = ["${aws_security_group.pro_graf_security.id}"]
+  security_groups  = ["${aws_security_group.pro_graf_security.name}"]
   instance_type = "t3.micro"
   provisioner   "remote-exec" {
     connection {
@@ -48,7 +47,7 @@ resource "aws_instance" "web" {
         user        = "ec2-user"
         private_key = "${file("~/.ssh/id_rsa")}"
     }
-    source  =  "/home/ec2-user/terraform-class-april-2020/vpc/configuration_files/prometheus_configs/prometheus.yml"
+    source  =  "/home/ec2-user/terraform-class-april-2020/group_project1/configuration_files/prometheus_configs/prometheus.yml"
     destination = "/tmp/prometheus.yml"
   },
   depends_on = ["aws_instance.web"]
@@ -59,7 +58,7 @@ resource "aws_instance" "web" {
         user        = "ec2-user"
         private_key = "${file("~/.ssh/id_rsa")}"
     }
-    source  =  "/home/ec2-user/terraform-class-april-2020/vpc/configuration_files/prometheus_configs/prometheus.service"
+    source  =  "/home/ec2-user/terraform-class-april-2020/group_project1/configuration_files/prometheus_configs/prometheus.service"
     destination = "/tmp/prometheus.service"
   },
   depends_on = ["aws_instance.web"]
@@ -92,7 +91,7 @@ resource "aws_instance" "web" {
         user        = "ec2-user"
         private_key = "${file("~/.ssh/id_rsa")}"
     }
-    source  =  "/home/ec2-user/terraform-class-april-2020/vpc/configuration_files/grafan_config/grafana.repo"
+    source  =  "/home/ec2-user/terraform-class-april-2020/group_project1/configuration_files/prometheus_configs/grafana.repo"
     destination = "/tmp/grafana.repo"
   },
   depends_on = ["aws_instance.web"]

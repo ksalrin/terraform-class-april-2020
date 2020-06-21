@@ -1,7 +1,6 @@
 resource "aws_security_group" "pro_graf_security" {
   name = "pro_graf_security"
   description = "Allow inbound traffic"
-  vpc_id = "${aws_vpc.project1.id}"
 
   ingress {
     description = "ssh_port"

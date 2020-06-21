@@ -1,8 +1,5 @@
 resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.project1.id}"
-  tags = {
-    Name = "project1_IG"
-  }
 }
 
 resource "aws_route_table" "r" {
@@ -10,9 +7,6 @@ resource "aws_route_table" "r" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.gw.id}"
-  }
-  tags = {
-    Name = "RT_public"
   }
 }
 
@@ -45,9 +39,6 @@ resource "aws_route_table_association" "c" {
 #   route {
 #     cidr_block = "0.0.0.0/0"
 #     gateway_id = "${aws_nat_gateway.gw.id}"
-#   }
-#   tags = {
-#     Name = "RT_private"
 #   }
 # }
 
