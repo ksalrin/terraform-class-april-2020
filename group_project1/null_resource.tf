@@ -1,38 +1,38 @@
-#   resource "null_resource" "mine" {
-#     triggers = {
-#         always_run = "${timestamp()}"
-#     }    
-#   depends_on = ["aws_instance.web"]
-#   provisioner   "file" {
-#     connection {
-#         host        = "${aws_instance.web.public_ip}"
-#         type        = "ssh"
-#         user        = "ec2-user"
-#         private_key = "${file("~/.ssh/id_rsa")}"
-#     }
-#     source  =  "grafana.repo"
-#     destination = "/tmp/grafana.repo"
-#   },
-#   depends_on = ["aws_instance.web"]
-#   provisioner   "remote-exec" {
-#     connection {
-#         host        = "${aws_instance.web.public_ip}"
-#         type        = "ssh"
-#         user        = "ec2-user"
-#         private_key = "${file("~/.ssh/id_rsa")}"
-#     }
-#     inline = [
-#     # move repo to the correct folder
-#      "sudo mv /tmp/grafana.repo /etc/yum.repos.d/grafana.repo",
-#      "sudo chown root:root /etc/yum.repos.d/grafana.repo",
-#      "yum-config-manager --enable grafana.repo",
-#      # install grafana
-#      "sudo yum install grafana fontconfig freetype* urw-fonts -y",
-#       # install start and enable grafana
-#      "sudo systemctl daemon-reload",
-#      "sudo systemctl start grafana-server",
-#      "sudo systemctl enable grafana-server.service",
-#      "sudo systemctl status grafana-server"
-#     ]
-#   }
-# }
+  resource "null_resource" "mine" {
+    triggers = {
+        always_run = "${timestamp()}"
+    }    
+   depends_on = ["aws_instance.node"]
+  provisioner   "file" {
+    connection {
+        host        = "${aws_instance.node.public_ip}"
+        type        = "ssh"
+        user        = "ec2-user"
+        private_key = "${file("~/.ssh/id_rsa")}"
+    }
+    source  =  "./configuration_files/prometheus_configs/node_exporter.service"
+    destination = "/tmp/node_exporter.service"
+  },
+  depends_on = ["aws_instance.node"]
+  provisioner   "remote-exec" {
+    connection {
+        host        = "${aws_instance.node.public_ip}"
+        type        = "ssh"
+        user        = "ec2-user"
+        private_key = "${file("~/.ssh/id_rsa")}"
+    }
+    inline = [
+      "sudo mv node_exporter-0.18.1.linux-amd64 /etc/prometheus/node_exporter",
+      # change ownership to prometheus
+      "sudo chown -R prometheus:prometheus /etc/prometheus/node_exporter",
+      # move service file to /etc folder and change ownership to root
+      "sudo mv /tmp/node_exporter.service /etc/systemd/system/node_exporter.service",
+      "sudo chown root:root /etc/systemd/system/node_exporter.service",
+      # start and enable services
+      "sudo systemctl daemon-reload", 
+      "sudo systemctl start node_exporter",
+      "sudo systemctl enable node_exporter",
+      "sudo systemctl status node_exporter"
+    ]
+  }
+}
