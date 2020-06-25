@@ -8,7 +8,7 @@ resource "aws_instance" "web" {
   iam_instance_profile = "${aws_iam_instance_profile.prometheus_profile.name}"
   key_name      = "${aws_key_pair.deployer.key_name}"
   vpc_security_group_ids = ["${aws_security_group.pro_graf_security.id}"]
-  instance_type = "t3.micro"
+  instance_type = "t3.small"
   provisioner   "remote-exec" {
     connection {
         host        = "${self.public_ip}"

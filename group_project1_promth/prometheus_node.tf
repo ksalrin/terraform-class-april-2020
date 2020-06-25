@@ -1,6 +1,5 @@
 resource "aws_instance" "node" {
   depends_on = ["aws_instance.web"]
-  count = 3
   ami           = "${data.aws_ami.centos7.id}"
   key_name      = "${aws_key_pair.deployer.key_name}"
   iam_instance_profile = "${aws_iam_instance_profile.prometheus_profile.name}"
@@ -36,7 +35,7 @@ resource "aws_instance" "node" {
         user        = "centos"
         private_key = "${file("~/.ssh/id_rsa")}"
     }
-    source  =  "./configurations/prometheus_configs/node_exporter.service"
+    source  =  "./configuration_files/prometheus_configs/node_exporter.service"
     destination = "/tmp/node_exporter.service"
   },
   depends_on = ["aws_instance.node"]
