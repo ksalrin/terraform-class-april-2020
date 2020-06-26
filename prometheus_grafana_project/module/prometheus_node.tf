@@ -1,10 +1,9 @@
 resource "aws_instance" "node" {
   depends_on = ["aws_instance.web"]
-  count = 3
   ami           = "${data.aws_ami.centos7.id}"
+  count = 3
   key_name      = "${aws_key_pair.deployer.key_name}"
-  iam_instance_profile = "${aws_iam_instance_profile.prometheus_profile.name}"
-  subnet_id = "${aws_subnet.public2.id}"
+  subnet_id = "${element(list("${aws_subnet.public2.id}", "${aws_subnet.public3.id}"), count.index)}"
   vpc_security_group_ids  = ["${aws_security_group.pro_node_security.id}"]
   instance_type = "t3.micro"
   provisioner   "remote-exec" {
@@ -28,21 +27,21 @@ resource "aws_instance" "node" {
       "tar xvfz node_exporter-0.18.1.linux-amd64.tar.gz",
     ]
   },
-   depends_on = ["aws_instance.node"]
+   depends_on = ["aws_instance.web"]
   provisioner   "file" {
     connection {
-        host        = "${aws_instance.node.public_ip}"
+        host        = "${self.public_ip}"
         type        = "ssh"
         user        = "centos"
         private_key = "${file("~/.ssh/id_rsa")}"
     }
-    source  =  "./configurations/prometheus_configs/node_exporter.service"
+    source  =  "./module/configurations/prometheus_configs/node_exporter.service"
     destination = "/tmp/node_exporter.service"
   },
-  depends_on = ["aws_instance.node"]
+  depends_on = ["aws_instance.web"]
   provisioner   "remote-exec" {
     connection {
-        host        = "${aws_instance.node.public_ip}"
+        host        = "${self.public_ip}"
         type        = "ssh"
         user        = "centos"
         private_key = "${file("~/.ssh/id_rsa")}"
@@ -61,7 +60,9 @@ resource "aws_instance" "node" {
       "sudo systemctl status node_exporter"
     ]
   }
-   tags = {
-    Name = "Node"
+ tags = {
+    Name = "Node ${count.index + 1}"
   }
+
 }
+  

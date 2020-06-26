@@ -14,7 +14,6 @@ data "aws_ami" "amazon" {
   owners = ["137112412989"] # Canonical
 }
 
-
 output "AMI_ID_AMAZON" {
-    value = "${data.aws_ami.amazon.id}"
+  value = "${data.aws_ami.amazon.id}"
 }
