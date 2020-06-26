@@ -18,6 +18,13 @@ Grafana is open source visualization and analytics software. It allows you to qu
 How does Prometheus | Grafana work together?
 Prometheus collects metric from monitored targets (nodes) by scraping metrics from HTTP endpoints on the targets. Grafana is an interface utilized to take the metrics scraped by Prometheus and present in an interface for analysis and visulization. 
 
+---Module---
+Open the apps.tf file and enter in your region, CIDR block range, and CIDR block public and private subnets. Then terrafom init and terraform apply to run.
+
+It will create the Prometheus|Grafana Server w/node exporter  and it will create 3 other nodes in seperate AZs from the Prometheus|Grafana Server. This is a test to show that Prometheus Service discovery is working and will automatically pull your nodes when node-exporter is installed (port 9100 needs to be open) on any other machine in your region's VPC.
+
+If you you only need the Prometheus|Grafana Server.  Please note out or delete the prometheus_node.tf and no nodes will be made. You can also use install directions as a reference to exporting to new machines when needed. 
+
 ---After Installation Access and Configurations---
 
 You can access Prometheus by entering "Server IP Address":9090. You can check if the target is pulling by accessing Settings > Targets. The target(s) will be listed.  Any new targets (nodes) created will be automatically added to this list with the service discovery. 
