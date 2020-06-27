@@ -1,3 +1,7 @@
+data "template_file" "init" { 
+  template = "${file("${path.module}/wordpress.sh")}" 
+} 
+
 #launch template
 
 resource "aws_launch_template" "example" {
@@ -6,6 +10,7 @@ resource "aws_launch_template" "example" {
   instance_type = "c5.large"
   key_name = "${aws_key_pair.us-east-1-key.key_name}"
   vpc_security_group_ids = ["${aws_security_group.asg-sec-group.id}"]
+  user_data = "${base64encode(data.template_file.init.rendered)}" 
 }
 
 resource "aws_autoscaling_group" "example" {
@@ -15,9 +20,9 @@ resource "aws_autoscaling_group" "example" {
     "${var.region}c",
   ]
 
-  desired_capacity = 1
-  max_size         = 1
-  min_size         = 1
+  desired_capacity = "${var.desired_capacity}"
+  max_size         = "${var.max_size}"
+  min_size         = "${var.min_size}"
 
   mixed_instances_policy {
     launch_template {
