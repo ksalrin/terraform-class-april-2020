@@ -6,3 +6,6 @@ variable "public_cidr_block3" {}
 variable "private_cidr_block1" {}
 variable "private_cidr_block2" {}
 variable "private_cidr_block3" {}
+variable "tags" {
+    type = "map"
+}

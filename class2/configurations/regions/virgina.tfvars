@@ -14,3 +14,16 @@ s3_folder_project               =   "jenkins"
 s3_folder_region                =   "us-east-1"
 s3_folder_type                  =   "tools"
 s3_tfstate_file                 =   "jenkins.tfstate"
+
+
+
+tags = {
+    Env             = "Development"
+    Billing         = "SMA"
+    Application     = "Artemis"
+    Region          = "us-east-1" 
+    Created_by      = "kelly salrin"
+    Team            = "DevOps"
+    Managed_by      = "infrastructure"
+    Quarter         = 3
+}
