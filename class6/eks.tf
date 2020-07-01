@@ -26,6 +26,7 @@ module "my-cluster" {
     cluster_version = "1.14" 
     subnets = var.subnets 
     vpc_id = var.vpc_id
+    tags = var.tags
     worker_groups = [{ 
     instance_type = var.instance_type
     asg_max_size = var.asg_max_size
