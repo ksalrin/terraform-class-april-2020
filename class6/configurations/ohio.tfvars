@@ -5,7 +5,7 @@ subnets = [
     "subnet-0256ce2f2e6e5b2b2", 
     "subnet-07bfbfc3b6c24f083"
 ] 
-vpc_id = "vpc-098048b72da469e33" 
+vpc_id = "vpc-efcb1484" 
 
 
 instance_type = "m4.large" 
