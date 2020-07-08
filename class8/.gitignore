@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
+<<<<<<< HEAD
 provider.tf
+=======
+>>>>>>> 6e9a4be1f1c976a82e14981815ef720b408a9768
 
 # .tfstate files
 *.tfstate
